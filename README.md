@@ -23,7 +23,7 @@ A React Native application with complete Login and Signup functionality, built u
 | React | 19.2.3 | UI library |
 | TypeScript | ^5.8 | Type safety |
 | React Navigation | ^7.0 | Screen navigation |
-| AsyncStorage | ^3.0 | Persistent storage |
+| AsyncStorage | ^1.24 | Persistent storage |
 | React Native Safe Area Context | ^5.0 | Safe area handling |
 
 ---
@@ -162,9 +162,76 @@ npm run ios:release
 
 ---
 
+## Demo Video
+
+https://github.com/user/UserAuthenticationApp/assets/videos/demo.mp4
+
+> If the video does not play inline, [download demo.mp4](assets/videos/demo.mp4).
+
+---
+
 ## Screenshots
 
-> _Add screenshots here after running the app on a device or emulator._
+### Login Screen
+
+<table>
+  <tr>
+    <td align="center"><b>Empty Form</b></td>
+    <td align="center"><b>Validation Error</b></td>
+    <td align="center"><b>Incorrect Credentials</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/login-empty.jpeg" width="220"/></td>
+    <td><img src="assets/screenshots/login-error-validation.jpeg" width="220"/></td>
+    <td><img src="assets/screenshots/login-error-incorrect-credentials.jpeg" width="220"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Password Hidden</b></td>
+    <td align="center"><b>Password Visible</b></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/login-password-hidden.jpeg" width="220"/></td>
+    <td><img src="assets/screenshots/login-password-visible.jpeg" width="220"/></td>
+    <td></td>
+  </tr>
+</table>
+
+### Signup Screen
+
+<table>
+  <tr>
+    <td align="center"><b>Empty Form</b></td>
+    <td align="center"><b>Validation Error</b></td>
+    <td align="center"><b>Email Already Registered</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/signup-empty.jpeg" width="220"/></td>
+    <td><img src="assets/screenshots/signup-error-validation.jpeg" width="220"/></td>
+    <td><img src="assets/screenshots/signup-error-email-already-registered.jpeg" width="220"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Password Hidden</b></td>
+    <td align="center"><b>Password Visible</b></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/signup-password-hidden.jpeg" width="220"/></td>
+    <td><img src="assets/screenshots/signup-password-visible.jpeg" width="220"/></td>
+    <td></td>
+  </tr>
+</table>
+
+### Home Screen
+
+<table>
+  <tr>
+    <td align="center"><b>Success Login</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/home-success-login.jpeg" width="220"/></td>
+  </tr>
+</table>
 
 ---
 
