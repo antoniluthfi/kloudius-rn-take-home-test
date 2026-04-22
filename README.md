@@ -19,19 +19,19 @@ A React Native application with complete Login and Signup functionality, built u
 
 ## Tech Stack
 
-| Library | Version | Purpose |
-|---|---|---|
-| React Native | 0.85.2 | Mobile framework |
-| React | 19.2.3 | UI library |
-| TypeScript | ^5.8 | Type safety |
-| React Navigation | ^7.0 | Screen navigation |
-| React Hook Form | ^7.0 | Form state management |
-| Zod | ^4.0 | Schema validation |
-| @hookform/resolvers | ^5.0 | Bridge between RHF and Zod |
-| AsyncStorage | ^1.24 | Persistent session storage |
-| React Native Vector Icons | ^10.0 | Icon library (Ionicons) |
-| React Native Safe Area Context | ^5.0 | Safe area handling |
-| React Native Screens | ^4.0 | Native navigation screens |
+| Library                        | Version | Purpose                    |
+| ------------------------------ | ------- | -------------------------- |
+| React Native                   | 0.85.2  | Mobile framework           |
+| React                          | 19.2.3  | UI library                 |
+| TypeScript                     | ^5.8    | Type safety                |
+| React Navigation               | ^7.0    | Screen navigation          |
+| React Hook Form                | ^7.0    | Form state management      |
+| Zod                            | ^4.0    | Schema validation          |
+| @hookform/resolvers            | ^5.0    | Bridge between RHF and Zod |
+| AsyncStorage                   | ^1.24   | Persistent session storage |
+| React Native Vector Icons      | ^10.0   | Icon library (Ionicons)    |
+| React Native Safe Area Context | ^5.0    | Safe area handling         |
+| React Native Screens           | ^4.0    | Native navigation screens  |
 
 ---
 
@@ -68,12 +68,12 @@ src/
 
 This project follows the **MVVM (Model-View-ViewModel)** pattern:
 
-| Layer | Location | Responsibility |
-|---|---|---|
-| **Model** | `src/schemas/` | Zod schemas that define data shape and validation rules. Types are auto-inferred via `z.infer<>`. |
-| **ViewModel** | `src/hooks/` | Custom hooks that own form state, call AuthContext, and handle errors. Screens know nothing about this logic. |
-| **View** | `src/screens/` | Pure UI — renders components and passes data from the ViewModel hook. No business logic. |
-| **Shared View** | `src/components/` | Reusable UI building blocks used across screens. |
+| Layer           | Location          | Responsibility                                                                                                |
+| --------------- | ----------------- | ------------------------------------------------------------------------------------------------------------- |
+| **Model**       | `src/schemas/`    | Zod schemas that define data shape and validation rules. Types are auto-inferred via `z.infer<>`.             |
+| **ViewModel**   | `src/hooks/`      | Custom hooks that own form state, call AuthContext, and handle errors. Screens know nothing about this logic. |
+| **View**        | `src/screens/`    | Pure UI — renders components and passes data from the ViewModel hook. No business logic.                      |
+| **Shared View** | `src/components/` | Reusable UI building blocks used across screens.                                                              |
 
 ### Data flow
 
@@ -94,6 +94,7 @@ Make sure your development environment is set up for React Native:
 - **iOS (macOS only):** Xcode + CocoaPods (`gem install cocoapods`)
 
 > **Tip — switching Node version with nvm:**
+>
 > ```sh
 > nvm install 22
 > nvm use 22
@@ -107,7 +108,7 @@ Make sure your development environment is set up for React Native:
 ### 1. Clone the repository
 
 ```sh
-git clone <your-repo-url>
+git clone https://github.com/antoniluthfi/kloudius-rn-take-home-test.git
 cd UserAuthenticationApp
 ```
 
@@ -181,13 +182,13 @@ npm run ios:release
 
 ## Other Useful Scripts
 
-| Script | Description |
-|---|---|
-| `npm run type-check` | Run TypeScript type checking |
-| `npm run lint` | Run ESLint |
-| `npm run format` | Format `src/` files with Prettier |
-| `npm run clean` | Clean build cache and artifacts |
-| `npm test` | Run Jest unit tests |
+| Script               | Description                       |
+| -------------------- | --------------------------------- |
+| `npm run type-check` | Run TypeScript type checking      |
+| `npm run lint`       | Run ESLint                        |
+| `npm run format`     | Format `src/` files with Prettier |
+| `npm run clean`      | Clean build cache and artifacts   |
+| `npm test`           | Run Jest unit tests               |
 
 ---
 
@@ -203,12 +204,12 @@ npm run ios:release
 
 All rules are defined in Zod schemas (`src/schemas/`) and enforced automatically via `zodResolver`.
 
-| Field | Schema | Rules |
-|---|---|---|
-| Email | `loginSchema`, `signupSchema` | Required, valid email format |
-| Password | `loginSchema` | Required |
-| Password | `signupSchema` | Required, minimum 6 characters |
-| Name | `signupSchema` | Required |
+| Field    | Schema                        | Rules                          |
+| -------- | ----------------------------- | ------------------------------ |
+| Email    | `loginSchema`, `signupSchema` | Required, valid email format   |
+| Password | `loginSchema`                 | Required                       |
+| Password | `signupSchema`                | Required, minimum 6 characters |
+| Name     | `signupSchema`                | Required                       |
 
 ---
 
