@@ -164,7 +164,7 @@ npm run ios:release
 
 ## Demo Video
 
-https://github.com/user/UserAuthenticationApp/assets/videos/demo.mp4
+https://github.com/user-attachments/assets/fb79dc46-e90e-400c-ba1c-f3e0c214852e
 
 > If the video does not play inline, [download demo.mp4](assets/videos/demo.mp4).
 
