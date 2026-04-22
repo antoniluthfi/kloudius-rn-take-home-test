@@ -20,7 +20,7 @@ export default function HomeScreen() {
           </Text>
         </View>
 
-        <Text style={styles.greeting}>Hello, {user?.name}! 👋</Text>
+        <Text style={styles.greeting}>Hello, {user?.name}!</Text>
         <Text style={styles.subtitle}>You are successfully logged in</Text>
 
         <View style={styles.infoCard}>
@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   avatarText: { fontSize: 36, fontWeight: '700', color: '#FFFFFF' },
-  greeting: { fontSize: 24, fontWeight: '700', color: '#0F172A', textAlign: 'center' },
+  greetingIcon: { marginTop: 2 },
+  greeting: { fontSize: 24, fontWeight: '700', color: '#0F172A' },
   subtitle: { fontSize: 14, color: '#64748B', marginTop: 6, marginBottom: 32 },
   infoCard: {
     width: '100%',

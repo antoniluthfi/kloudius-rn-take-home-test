@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useAuth } from '../context/AuthContext';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -146,7 +147,11 @@ export default function SignupScreen({ navigation }: Props) {
               <Pressable
                 style={styles.eyeButton}
                 onPress={() => setShowPassword(v => !v)}>
-                <Text style={styles.eyeIcon}>{showPassword ? '🙈' : '👁️'}</Text>
+                <Ionicons
+                  name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                  size={20}
+                  color="#94A3B8"
+                />
               </Pressable>
             </View>
             {errors.password ? (
@@ -234,7 +239,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
   },
-  eyeIcon: { fontSize: 18 },
   errorText: { color: '#EF4444', fontSize: 12, marginTop: 4, fontWeight: '500' },
   primaryButton: {
     backgroundColor: '#6366F1',
