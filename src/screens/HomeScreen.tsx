@@ -1,12 +1,8 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { useAuth } from '../context/AuthContext';
+import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAuth } from '../context/AuthContext';
+import PrimaryButton from '../components/PrimaryButton';
 
 export default function HomeScreen() {
   const { user, logout } = useAuth();
@@ -35,19 +31,22 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        <TouchableOpacity
-          style={styles.logoutButton}
+        <PrimaryButton
+          label="Logout"
+          color="#EF4444"
+          fullWidth
           onPress={logout}
-          activeOpacity={0.8}>
-          <Text style={styles.logoutButtonText}>Logout</Text>
-        </TouchableOpacity>
+        />
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#F1F5F9' },
+  safe: {
+    flex: 1,
+    backgroundColor: '#F1F5F9'
+  },
   container: {
     flex: 1,
     alignItems: 'center',
@@ -68,10 +67,22 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 6,
   },
-  avatarText: { fontSize: 36, fontWeight: '700', color: '#FFFFFF' },
-  greetingIcon: { marginTop: 2 },
-  greeting: { fontSize: 24, fontWeight: '700', color: '#0F172A' },
-  subtitle: { fontSize: 14, color: '#64748B', marginTop: 6, marginBottom: 32 },
+  avatarText: {
+    fontSize: 36,
+    fontWeight: '700',
+    color: '#FFFFFF'
+  },
+  greeting: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#0F172A'
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#64748B',
+    marginTop: 6,
+    marginBottom: 32
+  },
   infoCard: {
     width: '100%',
     backgroundColor: '#FFFFFF',
@@ -84,16 +95,28 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginBottom: 32,
   },
-  infoRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 4 },
-  separator: { height: 1, backgroundColor: '#F1F5F9', marginVertical: 12 },
-  infoLabel: { fontSize: 13, color: '#64748B', fontWeight: '500' },
-  infoValue: { fontSize: 14, color: '#0F172A', fontWeight: '600', flexShrink: 1, textAlign: 'right', marginLeft: 12 },
-  logoutButton: {
-    width: '100%',
-    backgroundColor: '#EF4444',
-    borderRadius: 12,
-    paddingVertical: 14,
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    paddingVertical: 4,
   },
-  logoutButtonText: { color: '#FFFFFF', fontSize: 15, fontWeight: '700', letterSpacing: 0.3 },
+  separator: {
+    height: 1,
+    backgroundColor: '#F1F5F9',
+    marginVertical: 12
+  },
+  infoLabel: {
+    fontSize: 13,
+    color: '#64748B',
+    fontWeight: '500'
+  },
+  infoValue: {
+    fontSize: 14,
+    color: '#0F172A',
+    fontWeight: '600',
+    flexShrink: 1,
+    textAlign: 'right',
+    marginLeft: 12,
+  },
 });

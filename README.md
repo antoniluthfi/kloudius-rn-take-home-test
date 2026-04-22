@@ -1,17 +1,19 @@
 # User Authentication App
 
-A React Native application with complete Login and Signup functionality, built using React Context API for authentication state management, React Navigation for screen routing, and AsyncStorage for persistent sessions.
+A React Native application with complete Login and Signup functionality, built using React Context API for authentication state management, React Hook Form + Zod for form handling and schema validation, React Navigation for screen routing, and AsyncStorage for persistent sessions. The codebase follows an **MVVM (Model-View-ViewModel)** architecture for a clean separation of concerns.
 
 ---
 
 ## Features
 
-- **Login** — Authenticate with email and password, with field validation and credential error handling
+- **Login** — Authenticate with email and password, with schema validation and credential error handling
 - **Signup** — Register a new account with name, email, and password
 - **Home Screen** — Displays the logged-in user's name and email with a logout button
 - **Persistent Session** — Users remain logged in after closing and reopening the app (AsyncStorage)
-- **Form Validation** — Inline error messages for missing fields, invalid email format, and short passwords
-- **Password Visibility Toggle** — Eye icon to show/hide password input
+- **Schema Validation** — Zod schemas power all form validation with inline error messages
+- **Password Visibility Toggle** — Eye icon (react-native-vector-icons) to show/hide password input
+- **MVVM Architecture** — Screens are pure Views; business logic lives in custom hooks (ViewModel); Zod schemas define the Model
+- **Reusable UI Components** — Shared components (FormField, PasswordField, PrimaryButton, etc.) used across screens
 
 ---
 
@@ -23,8 +25,13 @@ A React Native application with complete Login and Signup functionality, built u
 | React | 19.2.3 | UI library |
 | TypeScript | ^5.8 | Type safety |
 | React Navigation | ^7.0 | Screen navigation |
-| AsyncStorage | ^1.24 | Persistent storage |
+| React Hook Form | ^7.0 | Form state management |
+| Zod | ^4.0 | Schema validation |
+| @hookform/resolvers | ^5.0 | Bridge between RHF and Zod |
+| AsyncStorage | ^1.24 | Persistent session storage |
+| React Native Vector Icons | ^10.0 | Icon library (Ionicons) |
 | React Native Safe Area Context | ^5.0 | Safe area handling |
+| React Native Screens | ^4.0 | Native navigation screens |
 
 ---
 
@@ -32,14 +39,47 @@ A React Native application with complete Login and Signup functionality, built u
 
 ```
 src/
+├── components/          # Reusable UI components (View layer)
+│   ├── AlertBox.tsx        # Error banner
+│   ├── Divider.tsx         # "or" separator
+│   ├── FormField.tsx       # Label + Controller + error text
+│   ├── PasswordField.tsx   # FormField with eye visibility toggle
+│   ├── PrimaryButton.tsx   # Filled action button with loading state
+│   └── SecondaryButton.tsx # Outlined navigation button
 ├── context/
 │   └── AuthContext.tsx     # Global auth state (login, signup, logout, user)
+├── hooks/               # Custom hooks / ViewModel layer
+│   ├── useLoginForm.ts     # Login form logic + zodResolver
+│   └── useSignupForm.ts    # Signup form logic + zodResolver
 ├── navigation/
 │   └── AppNavigator.tsx    # Stack navigator — auth guard logic
-└── screens/
-    ├── LoginScreen.tsx     # Login form
-    ├── SignupScreen.tsx    # Signup form
-    └── HomeScreen.tsx      # Logged-in user dashboard
+├── schemas/             # Zod schemas / Model layer
+│   ├── loginSchema.ts      # Login validation schema + LoginFormData type
+│   └── signupSchema.ts     # Signup validation schema + SignupFormData type
+└── screens/             # Screen components (pure View layer)
+    ├── LoginScreen.tsx
+    ├── SignupScreen.tsx
+    └── HomeScreen.tsx
+```
+
+---
+
+## Architecture
+
+This project follows the **MVVM (Model-View-ViewModel)** pattern:
+
+| Layer | Location | Responsibility |
+|---|---|---|
+| **Model** | `src/schemas/` | Zod schemas that define data shape and validation rules. Types are auto-inferred via `z.infer<>`. |
+| **ViewModel** | `src/hooks/` | Custom hooks that own form state, call AuthContext, and handle errors. Screens know nothing about this logic. |
+| **View** | `src/screens/` | Pure UI — renders components and passes data from the ViewModel hook. No business logic. |
+| **Shared View** | `src/components/` | Reusable UI building blocks used across screens. |
+
+### Data flow
+
+```
+Zod Schema  ──(zodResolver)──▶  useForm (RHF)  ──▶  Custom Hook  ──▶  Screen
+  (Model)                        (validation)      (ViewModel)       (View)
 ```
 
 ---
@@ -154,11 +194,14 @@ npm run ios:release
 
 ### Validation Rules
 
-| Field | Rules |
-|---|---|
-| Email | Required, must match valid email format |
-| Password | Required, minimum 6 characters (Signup) |
-| Name | Required (Signup only) |
+All rules are defined in Zod schemas (`src/schemas/`) and enforced automatically via `zodResolver`.
+
+| Field | Schema | Rules |
+|---|---|---|
+| Email | `loginSchema`, `signupSchema` | Required, valid email format |
+| Password | `loginSchema` | Required |
+| Password | `signupSchema` | Required, minimum 6 characters |
+| Name | `signupSchema` | Required |
 
 ---
 

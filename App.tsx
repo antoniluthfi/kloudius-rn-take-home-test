@@ -8,7 +8,7 @@ import AppNavigator from './src/navigation/AppNavigator';
 export default function App() {
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="dark-content" backgroundColor="#F1F5F9" />
+      <StatusBar barStyle="dark-content" backgroundColor="#F1F5F9" translucent={false} />
       <AuthProvider>
         <NavigationContainer>
           <AppNavigator />

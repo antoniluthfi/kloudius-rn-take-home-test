@@ -1,203 +1,131 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useAuth } from '../context/AuthContext';
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import AlertBox from '../components/AlertBox';
+import Divider from '../components/Divider';
+import FormField from '../components/FormField';
+import PasswordField from '../components/PasswordField';
+import PrimaryButton from '../components/PrimaryButton';
+import SecondaryButton from '../components/SecondaryButton';
+import { useSignupForm } from '../hooks/useSignupForm';
 
 type Props = {
   navigation: any;
 };
 
 export default function SignupScreen({ navigation }: Props) {
-  const { signup } = useAuth();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<{
-    name?: string;
-    email?: string;
-    password?: string;
-    general?: string;
-  }>({});
-  const [loading, setLoading] = useState(false);
-
-  function validate() {
-    const errs: typeof errors = {};
-    if (!name.trim()) {
-      errs.name = 'Name is required';
-    }
-    if (!email.trim()) {
-      errs.email = 'Email is required';
-    } else if (!EMAIL_REGEX.test(email)) {
-      errs.email = 'Invalid email format';
-    }
-    if (!password) {
-      errs.password = 'Password is required';
-    } else if (password.length < 6) {
-      errs.password = 'Password must be at least 6 characters';
-    }
-    return errs;
-  }
-
-  async function handleSignup() {
-    const errs = validate();
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs);
-      return;
-    }
-    setErrors({});
-    setLoading(true);
-    try {
-      await signup(name.trim(), email.trim(), password);
-    } catch (e: any) {
-      setErrors({ general: e.message || 'Signup failed' });
-    } finally {
-      setLoading(false);
-    }
-  }
+  const {
+    control,
+    errors,
+    loading,
+    generalError,
+    clearGeneralError,
+    onSubmit
+  } = useSignupForm();
 
   return (
     <KeyboardAvoidingView
       style={styles.flex}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView
-        contentContainerStyle={styles.container}
-        keyboardShouldPersistTaps="handled">
-        <View style={styles.header}>
-          <Text style={styles.title}>Create Account</Text>
-          <Text style={styles.subtitle}>Sign up to get started</Text>
-        </View>
-
-        <View style={styles.card}>
-          {errors.general ? (
-            <View style={styles.alertBox}>
-              <Text style={styles.alertText}>{errors.general}</Text>
-            </View>
-          ) : null}
-
-          <View style={styles.field}>
-            <Text style={styles.label}>Full Name</Text>
-            <TextInput
-              style={[styles.input, errors.name ? styles.inputError : null]}
-              placeholder="John Doe"
-              placeholderTextColor="#94A3B8"
-              autoCapitalize="words"
-              value={name}
-              onChangeText={text => {
-                setName(text);
-                setErrors(prev => ({ ...prev, name: undefined }));
-              }}
-            />
-            {errors.name ? (
-              <Text style={styles.errorText}>{errors.name}</Text>
-            ) : null}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        onScrollBeginDrag={Keyboard.dismiss}>
+        <Pressable style={styles.container} onPress={Keyboard.dismiss}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Create Account</Text>
+            <Text style={styles.subtitle}>Sign up to get started</Text>
           </View>
 
-          <View style={styles.field}>
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-              style={[styles.input, errors.email ? styles.inputError : null]}
+          <View style={styles.card}>
+            {generalError ? <AlertBox message={generalError} /> : null}
+
+            <FormField
+              control={control}
+              name="name"
+              label="Full Name"
+              error={errors.name}
+              placeholder="John Doe"
+              autoCapitalize="words"
+            />
+
+            <FormField
+              control={control}
+              name="email"
+              label="Email"
+              error={errors.email}
               placeholder="you@example.com"
-              placeholderTextColor="#94A3B8"
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
-              value={email}
-              onChangeText={text => {
-                setEmail(text);
-                setErrors(prev => ({ ...prev, email: undefined, general: undefined }));
-              }}
+              onChangeCallback={clearGeneralError}
             />
-            {errors.email ? (
-              <Text style={styles.errorText}>{errors.email}</Text>
-            ) : null}
+
+            <PasswordField
+              control={control}
+              name="password"
+              label="Password"
+              error={errors.password}
+              placeholder="Min. 6 characters"
+            />
+
+            <PrimaryButton
+              label="Signup"
+              loadingLabel="Creating account..."
+              loading={loading}
+              onPress={onSubmit}
+            />
+
+            <Divider />
+
+            <SecondaryButton
+              label="Go to Login"
+              onPress={() => navigation.navigate('Login')}
+            />
           </View>
-
-          <View style={styles.field}>
-            <Text style={styles.label}>Password</Text>
-            <View style={styles.passwordWrapper}>
-              <TextInput
-                style={[
-                  styles.input,
-                  styles.passwordInput,
-                  errors.password ? styles.inputError : null,
-                ]}
-                placeholder="Min. 6 characters"
-                placeholderTextColor="#94A3B8"
-                secureTextEntry={!showPassword}
-                autoCapitalize="none"
-                value={password}
-                onChangeText={text => {
-                  setPassword(text);
-                  setErrors(prev => ({ ...prev, password: undefined }));
-                }}
-              />
-              <Pressable
-                style={styles.eyeButton}
-                onPress={() => setShowPassword(v => !v)}>
-                <Ionicons
-                  name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                  size={20}
-                  color="#94A3B8"
-                />
-              </Pressable>
-            </View>
-            {errors.password ? (
-              <Text style={styles.errorText}>{errors.password}</Text>
-            ) : null}
-          </View>
-
-          <TouchableOpacity
-            style={[styles.primaryButton, loading && styles.buttonDisabled]}
-            onPress={handleSignup}
-            disabled={loading}
-            activeOpacity={0.8}>
-            <Text style={styles.primaryButtonText}>
-              {loading ? 'Creating account...' : 'Signup'}
-            </Text>
-          </TouchableOpacity>
-
-          <View style={styles.divider}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>or</Text>
-            <View style={styles.dividerLine} />
-          </View>
-
-          <TouchableOpacity
-            style={styles.secondaryButton}
-            onPress={() => navigation.navigate('Login')}
-            activeOpacity={0.8}>
-            <Text style={styles.secondaryButtonText}>Go to Login</Text>
-          </TouchableOpacity>
-        </View>
+        </Pressable>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  flex: { flex: 1, backgroundColor: '#F1F5F9' },
+  flex: {
+    flex: 1,
+    backgroundColor: '#F1F5F9'
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
   container: {
     flexGrow: 1,
     justifyContent: 'center',
     paddingHorizontal: 24,
     paddingVertical: 48,
   },
-  header: { alignItems: 'center', marginBottom: 32 },
-  title: { fontSize: 30, fontWeight: '700', color: '#0F172A', letterSpacing: -0.5 },
-  subtitle: { fontSize: 15, color: '#64748B', marginTop: 6 },
+  header: {
+    alignItems: 'center',
+    marginBottom: 32
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: '700',
+    color: '#0F172A',
+    letterSpacing: -0.5
+  },
+  subtitle: {
+    fontSize: 15,
+    color: '#64748B',
+    marginTop: 6
+  },
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
@@ -208,60 +136,4 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 4,
   },
-  alertBox: {
-    backgroundColor: '#FEE2E2',
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 16,
-    borderLeftWidth: 4,
-    borderLeftColor: '#EF4444',
-  },
-  alertText: { color: '#B91C1C', fontSize: 13, fontWeight: '500' },
-  field: { marginBottom: 18 },
-  label: { fontSize: 13, fontWeight: '600', color: '#374151', marginBottom: 6 },
-  input: {
-    backgroundColor: '#F8FAFC',
-    borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 15,
-    color: '#0F172A',
-  },
-  inputError: { borderColor: '#EF4444' },
-  passwordWrapper: { position: 'relative' },
-  passwordInput: { paddingRight: 48 },
-  eyeButton: {
-    position: 'absolute',
-    right: 12,
-    top: 0,
-    bottom: 0,
-    justifyContent: 'center',
-  },
-  errorText: { color: '#EF4444', fontSize: 12, marginTop: 4, fontWeight: '500' },
-  primaryButton: {
-    backgroundColor: '#6366F1',
-    borderRadius: 12,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  buttonDisabled: { opacity: 0.6 },
-  primaryButtonText: { color: '#FFFFFF', fontSize: 15, fontWeight: '700', letterSpacing: 0.3 },
-  divider: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-  dividerLine: { flex: 1, height: 1, backgroundColor: '#E2E8F0' },
-  dividerText: { marginHorizontal: 12, color: '#94A3B8', fontSize: 13 },
-  secondaryButton: {
-    borderWidth: 1.5,
-    borderColor: '#6366F1',
-    borderRadius: 12,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  secondaryButtonText: { color: '#6366F1', fontSize: 15, fontWeight: '600' },
 });

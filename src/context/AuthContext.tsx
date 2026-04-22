@@ -16,6 +16,7 @@ type StoredUser = User & { password: string };
 
 type AuthContextType = {
   user: User | null;
+  isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   signup: (name: string, email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -28,13 +29,16 @@ const USERS_KEY = 'auth_users';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    AsyncStorage.getItem(CURRENT_USER_KEY).then(value => {
-      if (value) {
-        setUser(JSON.parse(value));
-      }
-    });
+    AsyncStorage.getItem(CURRENT_USER_KEY)
+      .then(value => {
+        if (value) {
+          setUser(JSON.parse(value));
+        }
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
@@ -73,7 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );
