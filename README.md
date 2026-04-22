@@ -88,10 +88,17 @@ Zod Schema  ──(zodResolver)──▶  useForm (RHF)  ──▶  Custom Hook 
 
 Make sure your development environment is set up for React Native:
 
-- [Node.js](https://nodejs.org/) >= 22.11.0
+- [Node.js](https://nodejs.org/) **>= 22** (older versions will throw a `util.styleText is not a function` error)
 - [React Native CLI environment](https://reactnative.dev/docs/set-up-your-environment)
 - **Android:** Android Studio + Android SDK
 - **iOS (macOS only):** Xcode + CocoaPods (`gem install cocoapods`)
+
+> **Tip — switching Node version with nvm:**
+> ```sh
+> nvm install 22
+> nvm use 22
+> nvm alias default 22  # make v22 the default for new terminals
+> ```
 
 ---
 
